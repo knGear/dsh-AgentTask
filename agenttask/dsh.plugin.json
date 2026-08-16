@@ -1,0 +1,15 @@
+{
+  "id": "dsh-agenttask",
+  "version": "1.0.0",
+  "main": "./index.js",
+  "client": {
+    "main": "./client.js",
+    "inject": [
+      "slots",
+      "sessions"
+    ]
+  },
+  "engines": {
+    "dsh": ">=0.0.1"
+  }
+}

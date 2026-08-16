@@ -1,15 +1,35 @@
 {
   "name": "dsh-agenttask",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "index.js",
+  "types": "index.d.ts",
   "description": "dsh-AgentTask: 任务监视(运行中/等待决策/已完成) + 进阶重启(感知运行分级确认), 全端可用",
+  "keywords": ["dsh", "dsh-plugin", "agent", "plugin", "monitor", "restart"],
   "exports": {
-    ".": "./index.js",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
     "./client": "./client.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
     "./package.json": "./package.json"
   },
+  "files": [
+    "index.js",
+    "client.js",
+    "index.d.ts",
+    "cordis.patch.yml",
+    "dsh.plugin.json",
+    "SKILL.md"
+  ],
+  "scripts": {
+    "check": "node --check index.js && node --check client.js"
+  },
   "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "client": {
       "inject": [
         "slots",
@@ -18,5 +38,12 @@
       "platform": "web",
       "immediately": true
     }
-  }
+  },
+  "peerDependencies": {
+    "cordis": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
 }

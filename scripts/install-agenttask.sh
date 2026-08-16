@@ -4,8 +4,9 @@
 # 用法: bash install-agenttask.sh [本地插件目录]
 #   - 无参: 从 GitHub raw 下载 (knGear/dsh-agenttask main 分支)
 #   - 带参: 本地目录 (开发/离线), 如 bash install-agenttask.sh /sdcard/1tui/apk-dshm-agenttask/agenttask
-# 效果: ① 插件 → ~/.dsh/profiles/node_modules/dsh-agenttask/
-#       ② web profile 补丁 → ~/.dsh/profiles/web/cordis.patch.yml (insert 去重)
+# 效果: ① 插件包(index.js/client.js/package.json/cordis.patch.yml/dsh.plugin.json/index.d.ts)
+#          → ~/.dsh/profiles/node_modules/dsh-agenttask/
+#       ② web profile 补丁 → ~/.dsh/profiles/web/cordis.patch.yml (复用包内 patch, insert 去重)
 #       ③ skill → ~/.agents/skills/dsh-agenttask-skill/SKILL.md
 #       ④ 重启脚本 → $PREFIX/bin/dsh-web-restart (缺失才生成)
 # ============================================================
@@ -21,14 +22,15 @@ IS_TERMUX=0
 [ -n "${PREFIX:-}" ] && [ -d "$PREFIX" ] && IS_TERMUX=1
 SRC="${1:-}"
 
+FILES="index.js client.js package.json cordis.patch.yml dsh.plugin.json index.d.ts"
 echo "$P 1/4 安装插件 dsh-agenttask ..."
 mkdir -p "$PLUGIN_DIR"
 if [ -n "$SRC" ] && [ -d "$SRC" ]; then
-  for f in index.js client.js package.json; do
+  for f in $FILES; do
     [ -f "$SRC/$f" ] && cp -f "$SRC/$f" "$PLUGIN_DIR/$f" && echo "  $f ✓ (本地)" || echo "  $f 缺失 ⚠️"
   done
 else
-  for f in index.js client.js package.json; do
+  for f in $FILES; do
     curl -fsSL -o "$PLUGIN_DIR/$f" "$BASE/$f" && echo "  $f ✓ (raw)" || echo "  $f 下载失败 ⚠️"
   done
 fi
@@ -36,11 +38,7 @@ fi
 echo "$P 2/4 挂载 cordis.patch.yml ..."
 mkdir -p "$(dirname "$PATCH_FILE")"
 if [ ! -f "$PATCH_FILE" ]; then
-  cat > "$PATCH_FILE" <<'PATCH'
-- insert:
-    - id: dsh-agenttask
-      name: 'dsh-agenttask'
-PATCH
+  cp -f "$PLUGIN_DIR/cordis.patch.yml" "$PATCH_FILE"
   echo "  已生成 $PATCH_FILE"
 elif ! grep -q "id: dsh-agenttask" "$PATCH_FILE"; then
   printf '\n- insert:\n    - id: dsh-agenttask\n      name: dsh-agenttask\n' >> "$PATCH_FILE"
@@ -61,7 +59,7 @@ if [ "$IS_TERMUX" != 1 ]; then
 elif [ ! -s "$RESTART_BIN" ]; then
   cat > "$RESTART_BIN" <<EOF
 #!/data/data/com.termux/files/usr/bin/bash
-# dsh-web-restart: 重启 dsh web (由 dsh-agenttask /api/dshm-restart-go 调用)
+# dsh-web-restart: 重启 dsh web (由 dsh-agenttask 调用)
 BIN=$PREFIX/lib/node_modules/@deepseek-ai/dsh/lib/bin.js
 LOG="\\$HOME/.cache/dsh-web.log"
 sleep 1

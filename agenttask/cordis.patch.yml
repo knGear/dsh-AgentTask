@@ -1,0 +1,5 @@
+# dsh bundle patch: 把本插件插入 profile 的 layer stack。
+# 标准安装(dsh plugin add)读取此文件;增强安装脚本也复用同一份。
+- insert:
+    - id: dsh-agenttask
+      name: dsh-agenttask

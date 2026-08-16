@@ -1,0 +1,12 @@
+# 文档/截图(不进版本库)
+START.md
+screenshots/
+
+# 敏感与本地文件
+.env
+.env.*
+*.pem
+*.key
+id_ed25519*
+gh_hosts.yml
+*.token
