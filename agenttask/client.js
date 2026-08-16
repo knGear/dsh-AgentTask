@@ -302,7 +302,7 @@ window.__ModuleLoader__.load({
       })
     }
 
-    // ── 进阶重启按钮(priority -10 shadow dshm-ui 普通版) ──
+    // ── 进阶重启按钮(点击重载 / 长按·右键重启) ──
     function ReloadButton() {
       var React = require('react')
       var ref = React.useRef(null)
@@ -481,8 +481,6 @@ window.__ModuleLoader__.load({
     // ── apply ──
     function apply(ctx) {
       applyCtx = ctx
-      // 标记: dshm-ui 检测到后隐藏自己的刷新按钮(本插件接管)
-      try { window.__dshAgentTask = true } catch (e) {}
       // CSS: 刷新/重启文案仅侧栏展开时显示
       try {
         var st = document.createElement('style')
@@ -535,10 +533,10 @@ window.__ModuleLoader__.load({
         agMo.observe(document.body, { childList: true, subtree: true })
         setInterval(agRender, 2000)
       } catch (e) {}
-      // 进阶重启按钮(priority -10 shadow dshm-ui 普通版)
+      // 进阶重启按钮(独立注册, 不与 dshm-ui 交互)
       slots.inject('sidebar.footer.action', function () {
         return slots.register(
-          { name: 'sidebar.footer.action', id: 'dsh-agenttask-reload', order: 5, priority: -10 },
+          { name: 'sidebar.footer.action', id: 'dsh-agenttask-reload', order: 5 },
           ReloadButton,
         )
       })
