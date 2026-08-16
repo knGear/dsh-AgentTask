@@ -1,0 +1,22 @@
+{
+  "name": "dsh-agenttask",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "index.js",
+  "description": "dsh-AgentTask: 任务监视(运行中/等待决策/已完成) + 进阶重启(感知运行分级确认), 全端可用",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "client": {
+      "inject": [
+        "slots",
+        "sessions"
+      ],
+      "platform": "web",
+      "immediately": true
+    }
+  }
+}
