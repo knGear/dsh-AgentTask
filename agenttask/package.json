@@ -4,8 +4,14 @@
   "type": "module",
   "main": "index.js",
   "types": "index.d.ts",
-  "description": "dsh-AgentTask: 任务监视(运行中/等待决策/已完成) + 进阶重启(感知运行分级确认), 全端可用",
-  "keywords": ["dsh", "dsh-plugin", "agent", "plugin", "monitor", "restart"],
+  "description": "dsh-AgentTask: 纯任务监视(胶囊 x/y + 面板三段 + 点击跳转), 全端可用",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "agent",
+    "plugin",
+    "monitor"
+  ],
   "exports": {
     ".": {
       "types": "./index.d.ts",
