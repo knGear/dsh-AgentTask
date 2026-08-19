@@ -1,0 +1,39 @@
+{
+  "name": "dsh-agenttask",
+  "version": "1.1.0",
+  "type": "module",
+  "main": "agenttask/index.js",
+  "types": "agenttask/index.d.ts",
+  "description": "dsh-AgentTask: 纯任务监视(胶囊 x/y + 面板三段 + 点击跳转), 全端可用",
+  "keywords": ["dsh", "dsh-plugin", "agent", "plugin", "monitor"],
+  "exports": {
+    ".": {
+      "types": "./agenttask/index.d.ts",
+      "default": "./agenttask/index.js"
+    },
+    "./client": "./agenttask/client.js",
+    "./cordis.patch.yml": "./agenttask/cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": ["agenttask"],
+  "scripts": {
+    "check": "node --check agenttask/index.js && node --check agenttask/client.js"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./agenttask/cordis.patch.yml"
+    },
+    "client": {
+      "inject": ["slots", "sessions"],
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "peerDependencies": {
+    "cordis": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}
